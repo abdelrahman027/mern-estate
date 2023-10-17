@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 
 const SignIn = () => {
   const [signinData, setSigninData] = useState({});
-  const [fetchError, setFetchError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setSigninData({
       ...signinData,
@@ -20,7 +21,7 @@ const SignIn = () => {
     e.preventDefault();
     try
     {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -32,17 +33,14 @@ const SignIn = () => {
       const data = await res.json();
       if (data.success === false)
       {
-        setLoading(false);
-        setFetchError(data.message);
+        dispatch(signInFailure(data.message))
         return;
       }
-      setLoading(false);
-      setFetchError(null);
+      dispatch(signInSuccess(data))
       navigate("/");
     } catch (error)
     {
-      setLoading(false);
-      setFetchError(error.message);
+      dispatch(signInFailure(error.message))
     }
   };
   return (
@@ -69,7 +67,7 @@ const SignIn = () => {
         >
           {loading ? "loading" : "Sign in"}
         </button>
-        {fetchError && <p className="text-red-500">{fetchError}</p>}
+        {error && <p className="text-red-500 border bg-white text-sm p-1 rounded-lg text-center">{error}</p>}
       </form>
       <div className="flex gap-2 mt-5">
         <p>Dont Have an acount?</p>
