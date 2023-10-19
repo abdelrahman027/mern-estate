@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
   const [signupData, setSignupData] = useState({});
@@ -18,7 +19,8 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+    try
+    {
       setLoading(true);
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -29,7 +31,8 @@ const SignUp = () => {
       });
 
       const data = await res.json();
-      if (data.success === false) {
+      if (data.success === false)
+      {
         setLoading(false);
         setFetchError(data.message);
         return;
@@ -37,7 +40,8 @@ const SignUp = () => {
       setLoading(false);
       setFetchError(null);
       navigate("/sign-in");
-    } catch (error) {
+    } catch (error)
+    {
       setLoading(false);
       setFetchError(error.message);
     }
@@ -73,6 +77,7 @@ const SignUp = () => {
         >
           {loading ? "loading" : "Sign up"}
         </button>
+        <OAuth />
         {fetchError && <p className="text-red-500">{fetchError}</p>}
       </form>
       <div className="flex gap-2 mt-5">
