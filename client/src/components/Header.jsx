@@ -1,10 +1,14 @@
+/** @format */
+
 import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [toggleDrop, setToggleDrop] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
   const toggleDropHandler = () => {
     setToggleDrop(!toggleDrop);
   };
@@ -39,10 +43,18 @@ const Header = () => {
               ِAbout
             </li>
           </Link>
-          <Link to="sign-in">
-            <li className="text-slate-700 hover:underline cursor-pointer">
-              Sign in
-            </li>
+          <Link to="/profile">
+            {currentUser ? (
+              <img
+                src={currentUser.avatar}
+                alt="avatar"
+                className="w-8 h-8 object-cover rounded-full"
+              />
+            ) : (
+              <li className="text-slate-700 hover:underline cursor-pointer">
+                Sign in
+              </li>
+            )}
           </Link>
         </ul>
         {/* DropDown */}
@@ -63,8 +75,7 @@ const Header = () => {
               toggleDrop ? "block" : "hidden"
             } absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
             tabIndex="-1"
-            onMouseLeave={()=>setToggleDrop(false)}
-
+            onMouseLeave={() => setToggleDrop(false)}
           >
             <ul className="py-1" role="none">
               <Link to="/">
@@ -85,14 +96,21 @@ const Header = () => {
                   About
                 </li>
               </Link>
-              <Link to="/sign-in">
-                <li
-                  href="#"
-                  className="text-slate-700 block px-4 py-2 text-sm hover:underline cursor-pointer"
-                  tabIndex="-1"
-                >
-                  Sign in
-                </li>
+              <Link to="/profile">
+                {currentUser ? (
+                  <li className="flex items-center font-semibold hover:bg-slate-100 p-1 justify-center gap-2">
+                    Profile
+                    <img
+                      src={currentUser.avatar}
+                      alt="avatar"
+                      className="w-8 h-8 object-cover rounded-full"
+                    />
+                  </li>
+                ) : (
+                  <li className="text-slate-700 block px-4 py-2 text-sm hover:underline cursor-pointer">
+                    Sign in
+                  </li>
+                )}
               </Link>
             </ul>
           </div>
