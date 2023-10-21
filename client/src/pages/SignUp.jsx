@@ -3,12 +3,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import { BiHide, BiShow } from "react-icons/bi";
 
 const SignUp = () => {
+  const [showPasword, setShowPassword] = useState(false);
   const [signupData, setSignupData] = useState({});
   const [fetchError, setFetchError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPasword);
+  };
 
   const handleChange = (e) => {
     setSignupData({
@@ -19,8 +25,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try
-    {
+    try {
       setLoading(true);
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -31,8 +36,7 @@ const SignUp = () => {
       });
 
       const data = await res.json();
-      if (data.success === false)
-      {
+      if (data.success === false) {
         setLoading(false);
         setFetchError(data.message);
         return;
@@ -40,8 +44,7 @@ const SignUp = () => {
       setLoading(false);
       setFetchError(null);
       navigate("/sign-in");
-    } catch (error)
-    {
+    } catch (error) {
       setLoading(false);
       setFetchError(error.message);
     }
@@ -64,13 +67,25 @@ const SignUp = () => {
           className="p-3 border rounded-lg"
           onChange={handleChange}
         />
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          className="p-3 border rounded-lg"
-          onChange={handleChange}
-        />
+        <div className="relative">
+          <input
+            type={showPasword ? "text" : "password"}
+            id="password"
+            placeholder="Password"
+            className="p-3 border rounded-lg w-full"
+            onChange={handleChange}
+          />
+          <div
+            className="absolute top-3 text-slate-200 cursor-pointer hover:text-slate-300 right-2"
+            onClick={handleShowPassword}
+          >
+            {showPasword ? (
+              <BiHide className="h-7 w-7" />
+            ) : (
+              <BiShow className="h-7 w-7" />
+            )}
+          </div>
+        </div>
         <button
           disabled={loading}
           className="bg-slate-700 text-white p-3 rounded lg hover:bg-slate-600 uppercase disabled:opacity-80"
