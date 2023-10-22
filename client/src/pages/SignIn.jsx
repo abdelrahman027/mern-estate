@@ -74,9 +74,9 @@ const SignIn = () => {
             onClick={handleShowPassword}
           >
             {showPasword ? (
-              <BiHide className="h-7 w-7" />
-            ) : (
               <BiShow className="h-7 w-7" />
+            ) : (
+              <BiHide className="h-7 w-7" />
             )}
           </div>
         </div>
