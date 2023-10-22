@@ -1,17 +1,20 @@
+/** @format */
+
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRoutes from './routes/user.routes.js';
-import authRoutes from './routes/auth.routes.js';
+import userRoutes from "./routes/user.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser());
 
-app.use('/api/user', userRoutes);
+app.use("/api/user", userRoutes);
 
-
-app.use('/api/auth', authRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -19,11 +22,9 @@ app.use((err, req, res, next) => {
   return res.status(statusCode).json({
     success: false,
     statusCode,
-    message
+    message,
   });
 });
-
-
 
 mongoose
   .connect(process.env.MONGO_URI)
