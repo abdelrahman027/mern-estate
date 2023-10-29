@@ -11,7 +11,7 @@ const CreateListing = () => {
       <form className="text-center grid grid-cols-1 justify-center items-center md:grid-cols-2">
         <div>
           {/* TEXT INPUTS */}
-          <div className="flex flex-col gap-2 w-3/4 mx-auto">
+          <div className="flex flex-col gap-2 w-3/4">
             <input
               type="text"
               name="name"
@@ -35,7 +35,7 @@ const CreateListing = () => {
             />
           </div>
           {/* CHECK BOXES */}
-          <div className="flex gap-6 itmes-center justify-center flex-wrap mt-4">
+          <div className="flex gap-6 itmes-center border-gray-300 border p-3 w-fit rounded-lg flex-wrap mt-4">
             <div className="flex gap-1">
               <input type="checkbox" name="sell" id="sell" />
               <span>Sell</span>
@@ -58,14 +58,14 @@ const CreateListing = () => {
             </div>
           </div>
           {/* NUMBER INPUTS */}
-          <div className="flex gap-4 flex-wrap items-center justify-center mt-4">
+          <div className="flex gap-4 flex-wrap  border-gray-300 border p-3 w-fit rounded-lg items-center  mt-4">
             <div className="gap-2 flex items-center" defaultValue={1}>
               <label htmlFor="beds">Beds:</label>
               <input
                 type="number"
                 name="bedroom"
                 id="bedroom"
-                className="rounded-lg py-2 w-12 border border-gray-300"
+                className="rounded-lg p-2 w-12 border border-gray-300"
               />
             </div>
             <div className="gap-2 flex items-center" defaultValue={1}>
@@ -74,18 +74,18 @@ const CreateListing = () => {
                 type="number"
                 name="bathroom"
                 id="bathroom"
-                className="rounded-lg py-2 w-12 border border-gray-300"
+                className="rounded-lg p-2 w-12 border border-gray-300"
               />
             </div>
           </div>
-          <div className="flex gap-4 items-center justify-center">
+          <div className="flex gap-4 items-center justify-center border border-gray-300 w w-fit rounded-lg p-3 mt-4">
             <div className="text-center mt-4" defaultValue={1}>
               <label htmlFor="regularPrice">Regular Price: </label>
               <input
                 type="number"
                 name="regularPrice"
                 id="regularPrice"
-                className="rounded-lg py-2 w-24 border border-gray-300"
+                className="rounded-lg p-2 w-24 border border-gray-300"
               />
               <span className="text-xs opacity-50"> ($/month) </span>
             </div>
@@ -95,7 +95,7 @@ const CreateListing = () => {
                 type="number"
                 name="discountPrice"
                 id="discountPrice"
-                className="rounded-lg py-2 w-24 border border-gray-300"
+                className="rounded-lg p-2 w-24 border border-gray-300"
               />
               <span className="text-xs opacity-50"> ($/month) </span>
             </div>
