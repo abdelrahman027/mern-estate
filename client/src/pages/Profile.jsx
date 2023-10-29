@@ -21,6 +21,7 @@ import {
   logoutUserStart,
   logoutUserSuccess,
 } from "../redux/user/userSlice";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -193,10 +194,16 @@ const Profile = () => {
         </div>
         <button
           disabled={loading}
-          className="p-3 rounded-lg text-white bg-slate-700 hover:bg-slate-600"
+          className="p-3 rounded-lg text-white bg-slate-700 hover:bg-slate-600 uppercase"
         >
           {loading ? "...loading" : "Update"}
         </button>
+        <Link
+          to={"/create-listing"}
+          className="bg-green-700 text-white text-center p-3 rounded-lg uppercase hover:bg-green-600"
+        >
+          create listing
+        </Link>
       </form>
       <div className="flex justify-between items-center mt-4">
         <span
