@@ -3,18 +3,21 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RiDeleteBack2Fill, RiEditBoxFill } from "react-icons/ri";
+import { RiEditBoxLine } from "react-icons/ri";
+import { FiDelete } from "react-icons/fi";
 const UserListings = () => {
   //*********HOOKS*********/
   const [ListingError, setListingError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
   //*********HOOKS*********/
 
   //*********functions*********/
 
   const handleShowListings = async () => {
     try {
+      setLoading(true);
       setListingError(false);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
@@ -23,13 +26,33 @@ const UserListings = () => {
         return;
       }
       setUserListings(data);
+      setLoading(false);
     } catch (error) {
       setListingError(true);
+      setLoading(false);
     }
   };
   useEffect(() => {
     handleShowListings();
   }, [handleShowListings]);
+
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setUserListings((prev) =>
+        prev.filter((listing) => listing.id !== listingId)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //*********functions*********/
 
@@ -55,15 +78,21 @@ const UserListings = () => {
               </Link>
             </div>
             <div className="flex items-center flex-col gap-2 justify-center">
-              <button>
-                <RiDeleteBack2Fill className="w-5 h-5 text-gray-400 hover:text-red-700" />
+              <button
+                onClick={() => {
+                  handleListingDelete(listing._id);
+                }}
+              >
+                <FiDelete className="w-6 h-6 text-gray-400 hover:text-red-700" />
               </button>
               <button>
-                <RiEditBoxFill className="w-5 h-5 text-gray-400 hover:text-green-700" />
+                <RiEditBoxLine className="w-6 h-6 text-gray-400 hover:text-green-700" />
               </button>
             </div>
           </div>
         ))
+      ) : loading ? (
+        <p className="mt-8">...loading</p>
       ) : (
         <div>
           <h3 className="my-8">There is no Listings here yet !</h3>
