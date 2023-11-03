@@ -85,9 +85,11 @@ const UserListings = () => {
               >
                 <FiDelete className="w-6 h-6 text-gray-400 hover:text-red-700" />
               </button>
-              <button>
-                <RiEditBoxLine className="w-6 h-6 text-gray-400 hover:text-green-700" />
-              </button>
+              <Link to={`/update-listing/${listing._id}`}>
+                <button>
+                  <RiEditBoxLine className="w-6 h-6 text-gray-400 hover:text-green-700" />
+                </button>
+              </Link>
             </div>
           </div>
         ))
