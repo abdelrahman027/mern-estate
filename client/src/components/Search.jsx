@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Search = () => {
@@ -13,7 +13,10 @@ const Search = () => {
     sort: "created_at",
     order: "desc",
   });
+  const [loading, setLoading] = useState(false);
+  const [listings, setListings] = useState([])
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -33,7 +36,8 @@ const Search = () => {
       offerFromUrl ||
       sortFromUrl ||
       orderFromUrl
-    ) {
+    )
+    {
       setSearchFilterData({
         searchTerms: searchTermFromUrl || "",
         type: typeFromUrl || "all",
@@ -44,6 +48,23 @@ const Search = () => {
         order: orderFromUrl || "desc",
       });
     }
+    const fetchListing = async () => {
+      try
+      {
+        setLoading(true);
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const data = await res.json();
+        setLoading(false)
+        setListings(data)
+      } catch (error)
+      {
+        setLoading(false)
+        console.log(error);
+      }
+    }
+    fetchListing()
+
   }, [location.search]);
 
   const handleChange = (e) => {
@@ -51,11 +72,13 @@ const Search = () => {
       e.target.id === "all" ||
       e.target.id === "rent" ||
       e.target.id === "sale"
-    ) {
+    )
+    {
       setSearchFilterData({ ...searchFilterData, type: e.target.id });
     }
 
-    if (e.target.id === "searchTerms") {
+    if (e.target.id === "searchTerms")
+    {
       setSearchFilterData({ ...searchFilterData, searchTerms: e.target.value });
     }
 
@@ -63,14 +86,16 @@ const Search = () => {
       e.target.id === "parking" ||
       e.target.id === "furnished" ||
       e.target.id === "offer"
-    ) {
+    )
+    {
       setSearchFilterData({
         ...searchFilterData,
         [e.target.id]:
           e.target.checked || e.target.checked === "true" ? true : false,
       });
     }
-    if (e.target.id === "sort_order") {
+    if (e.target.id === "sort_order")
+    {
       const sort = e.target.value.split("_")[0] || "created_at";
       const order = e.target.value.split("_")[1] || "desc";
       setSearchFilterData({ ...searchFilterData, sort, order });
@@ -90,7 +115,7 @@ const Search = () => {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
-
+  console.log(listings)
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr]">
       {/* LEFT HAND */}
@@ -112,7 +137,7 @@ const Search = () => {
             />
           </div>
           {/* TYPE FILTERS */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <label className="whitespace-nowrap font-semibold">Type: </label>
             <div className="flex gap-1">
               <input
@@ -182,7 +207,8 @@ const Search = () => {
             <select
               id="sort_order"
               className="p-2 rounded-lg"
-              value={searchFilterData.sort}
+              // value={searchFilterData.sort}
+              defaultValue={'created_at_desc'}
               onChange={handleChange}
             >
               <option value="regularPrice_desc">Price high to low</option>

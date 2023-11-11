@@ -1,10 +1,9 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RiEditBoxLine } from "react-icons/ri";
-import { FiDelete } from "react-icons/fi";
+
 const UserListings = () => {
   //*********HOOKS*********/
   const [ListingError, setListingError] = useState(false);
@@ -16,40 +15,46 @@ const UserListings = () => {
   //*********functions*********/
 
   const handleShowListings = async () => {
-    try {
+    try
+    {
       setLoading(true);
       setListingError(false);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
-      if (data.success === false) {
+      if (data.success === false)
+      {
         setListingError(true);
         return;
       }
       setUserListings(data);
       setLoading(false);
-    } catch (error) {
+    } catch (error)
+    {
       setListingError(true);
       setLoading(false);
     }
   };
   useEffect(() => {
     handleShowListings();
-  }, [handleShowListings]);
+  }, []);
 
   const handleListingDelete = async (listingId) => {
-    try {
+    try
+    {
       const res = await fetch(`/api/listing/delete/${listingId}`, {
         method: "DELETE",
       });
       const data = await res.json();
-      if (data.success === false) {
+      if (data.success === false)
+      {
         console.log(data.message);
         return;
       }
       setUserListings((prev) =>
         prev.filter((listing) => listing.id !== listingId)
       );
-    } catch (error) {
+    } catch (error)
+    {
       console.log(error);
     }
   };
@@ -69,10 +74,10 @@ const UserListings = () => {
               alt="my image"
               className="w-12 h-12 object-cover"
             />
-            <div>
+            <div className="truncate">
               <Link
                 to={`/listing/${listing._id}`}
-                className="font-bold text-sm truncate hover:underline"
+                className="font-bold text-sm  hover:underline "
               >
                 {listing.name}
               </Link>
@@ -82,12 +87,14 @@ const UserListings = () => {
                 onClick={() => {
                   handleListingDelete(listing._id);
                 }}
+                className="p-1 bg-gray-300 rounded-full  hover:bg-red-700 "
               >
-                <FiDelete className="w-6 h-6 text-gray-400 hover:text-red-700" />
+                <span className="text-white">Delete</span>
+
               </button>
               <Link to={`/update-listing/${listing._id}`}>
-                <button>
-                  <RiEditBoxLine className="w-6 h-6 text-gray-400 hover:text-green-700" />
+                <button className="p-1 bg-gray-300 rounded-full  hover:bg-green-700 ">
+                  <span className="text-white">Edit</span>
                 </button>
               </Link>
             </div>
