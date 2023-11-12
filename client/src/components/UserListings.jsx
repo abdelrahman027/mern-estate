@@ -67,7 +67,7 @@ const UserListings = () => {
         userListings.map((listing) => (
           <div
             key={listing._id}
-            className=" border border-gray-300 flex items-center justify-around p-2 mt-4 rounded-lg"
+            className=" border gap-2 border-gray-300 flex items-center justify-around p-2 mt-4 rounded-lg"
           >
             <img
               src={listing.imageUrls[0]}

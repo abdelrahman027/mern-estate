@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ListingCard from "./ListingCard";
 
 const Search = () => {
   const [searchFilterData, setSearchFilterData] = useState({
@@ -105,7 +106,7 @@ const Search = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
-    urlParams.set("searchTerms", searchFilterData.searchTerms);
+    urlParams.set("searchTerm", searchFilterData.searchTerms);
     urlParams.set("type", searchFilterData.type);
     urlParams.set("parking", searchFilterData.parking);
     urlParams.set("furnished", searchFilterData.furnished);
@@ -117,10 +118,10 @@ const Search = () => {
   };
   console.log(listings)
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr]">
+    <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr]">
       {/* LEFT HAND */}
       <div className="border-b-2 md:border-r-2 md:min-h-screen md:border-b- p-3">
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
           {/* TEXT SEARECH */}
           <div className="flex items-center gap-2">
             <label className="whitespace-nowrap font-semibold">
@@ -217,7 +218,7 @@ const Search = () => {
               <option value="createdAt_asc">Oldest</option>
             </select>
           </div>
-          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-600">
+          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-600" disabled={loading}>
             Search
           </button>
         </form>
@@ -225,6 +226,17 @@ const Search = () => {
       {/* RIGHT HAND */}
       <div className="p-3 ">
         <h2 className="text-2xl font-bold p-2 border-b-2">Listing Results: </h2>
+        <div>
+          {!loading && listings.length === 0 && (<p className="text-2xl text-center font-semibold mt-12">sorry, There no such a Listing!</p>)}
+          {loading && <p className="text-2xl text-center font-semibold mt-12" >...Loading please wait !</p>}
+
+          <div className="grid grid-cols-1 items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-4 lg:gap-6 mt-8">
+            {!loading && listings && (listings.map((listing) => (
+              <ListingCard key={listing._id} listing={listing} />
+            )))}
+          </div>
+
+        </div>
       </div>
     </div>
   );

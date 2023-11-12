@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiHide, BiShow } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -42,7 +42,8 @@ const Profile = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   useEffect(() => {
-    if (file) {
+    if (file)
+    {
       handleFileUpload(file);
     }
   }, [file]);
@@ -71,7 +72,8 @@ const Profile = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+    try
+    {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
@@ -81,44 +83,52 @@ const Profile = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false) {
+      if (data.success === false)
+      {
         dispatch(updateUserFailure(data.message));
         return;
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
-    } catch (error) {
+    } catch (error)
+    {
       dispatch(updateUserFailure(error.message));
     }
   };
   const handleDeleteUser = async () => {
-    try {
+    try
+    {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
       });
       const data = res.json();
-      if (data.success === false) {
+      if (data.success === false)
+      {
         dispatch(deleteUserFailure(data.message));
         return;
       }
       dispatch(deleteUserSuccess(data));
-    } catch (error) {
+    } catch (error)
+    {
       dispatch(deleteUserFailure(error.message));
     }
   };
   const handleLogout = async () => {
-    try {
+    try
+    {
       dispatch(logoutUserStart());
       const res = await fetch("/api/auth/logout");
       console.log(res);
       const data = await res.json();
-      if (data.success === false) {
+      if (data.success === false)
+      {
         dispatch(logoutUserFailure(data.message));
         return;
       }
       dispatch(logoutUserSuccess());
-    } catch (error) {
+    } catch (error)
+    {
       dispatch(logoutUserFailure(error.message));
     }
   };
