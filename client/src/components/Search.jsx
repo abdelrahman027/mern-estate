@@ -16,6 +16,7 @@ const Search = () => {
   });
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([])
+  const [showMore, setShowMore] = useState(false)
   const navigate = useNavigate();
 
 
@@ -52,10 +53,15 @@ const Search = () => {
     const fetchListing = async () => {
       try
       {
+        setShowMore(false)
         setLoading(true);
         const searchQuery = urlParams.toString();
         const res = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await res.json();
+        if (data.length > 8)
+        {
+          setShowMore(true)
+        } else { setShowMore(false) }
         setLoading(false)
         setListings(data)
       } catch (error)
@@ -116,6 +122,20 @@ const Search = () => {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+  const showMoreHandler = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 9)
+    {
+      setShowMore(false);
+    }
+    setListings([...listings, ...data]);
+  }
   console.log(listings)
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr]">
@@ -235,6 +255,7 @@ const Search = () => {
               <ListingCard key={listing._id} listing={listing} />
             )))}
           </div>
+          {showMore && (<button onClick={() => showMoreHandler()} className="w-full hover:underline text-green-700 mt-8 text-lg">Show more</button>)}
 
         </div>
       </div>

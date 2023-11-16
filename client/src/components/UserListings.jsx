@@ -87,13 +87,13 @@ const UserListings = () => {
                 onClick={() => {
                   handleListingDelete(listing._id);
                 }}
-                className="p-1 bg-gray-300 rounded-full  hover:bg-red-700 "
+                className="p-1 bg-gray-400 rounded-lg  hover:bg-red-700 "
               >
                 <span className="text-white">Delete</span>
 
               </button>
               <Link to={`/update-listing/${listing._id}`}>
-                <button className="p-1 bg-gray-300 rounded-full  hover:bg-green-700 ">
+                <button className="p-1 bg-gray-400 rounded-lg  hover:bg-green-700 ">
                   <span className="text-white">Edit</span>
                 </button>
               </Link>

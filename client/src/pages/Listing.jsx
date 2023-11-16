@@ -2,23 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
-import { Navigation, EffectFade, Autoplay } from "swiper/modules";
-import "swiper/css/bundle";
 import { BiShare } from 'react-icons/bi';
 import { FaMapMarkerAlt, FaBed, FaBath, FaParking, FaChair } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import Contact from "../components/Contact";
+import ImageSlider from "../components/ImageSlider";
 
 
 const Listing = () => {
-  SwiperCore.use([Navigation, EffectFade, Autoplay]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [contact, setContact] = useState(false);
+  const [showFullImg, setShowFullImg] = useState(false)
   const { currentUser } = useSelector((state) => state.user)
   const params = useParams();
   const ListingId = params.id;
@@ -54,48 +51,47 @@ const Listing = () => {
 
   return (
     <main>
-      {loading && <p className="text-center my-8 text-2xl">..Loading</p>}
-      {error && (
-        <p className="text-center my-8 text-2xl">Something went wrong !</p>
-      )}
-      {listing && !error && !loading && (
-        <div>
-          {/* SLIDING IMAGE */}
-          <Swiper
-            navigation
-            effect="fade"
-            loop
-            speed={1500}
-            autoplay={{ delay: 3000 }}
-          >
-            {listing.imageUrls.map((url) => (
-              <SwiperSlide key={url}>
-                <div
-                  className="h-[350px]"
-                  style={{
-                    background: `url(${url}) center no-repeat`,
-                    backgroundSize: "cover",
-                  }}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          {/* COPY BUTTON */}
-          <div className="fixed top-32 right-10 z-10 w-10 h-10 border rounded-full flex items-center justify-center bg-slate-100 cursor-pointer">
-            <BiShare className="text-slate-500 text-xl"
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href)
-                setCopied(true);
-                setTimeout(() => {
-                  setCopied(false)
-                }, 2000);
 
-              }}
-            />
-          </div>
-          {copied && (<p className="fixed top-48 right-10 z-10 rounded-md bg-slate-100 p-2">Link copied! </p>)}
+      {showFullImg ? <div className="fixed overflow-auto top-0 left-0
+     p-12 w-full h-full z-40 bg-black/60">
+        <button className="fixed top-8 right-16 bg-red-700 text-white p-2 rounded-lg" onClick={() => setShowFullImg(false)}>Close</button>
+        <div className="flex flex-col gap-6">
+          {listing?.imageUrls.map((url) => (
+            <div key={`${listing._id}/img`} className="flex items-center justify-center">
+              <img src={url} alt="pic" className="rounded-lg w-[800px]" />
+            </div>
+          ))}
         </div>
-      )}
+      </div> : ''}
+
+      {loading && <p className="text-center my-8 text-2xl">..Loading</p>}
+      {
+        error && (
+          <p className="text-center my-8 text-2xl">Something went wrong !</p>
+        )
+      }
+      {
+        listing && !error && !loading && (
+          <div className="cursor-zoom-in" onClick={() => { setShowFullImg(true) }} >
+            {/* SLIDING IMAGE */}
+            <ImageSlider listing={listing} />
+            {/* COPY BUTTON */}
+            <div className="fixed top-32 right-10 z-10 w-10 h-10 border rounded-full flex items-center justify-center bg-slate-100 cursor-pointer">
+              <BiShare className="text-slate-500 text-xl"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href)
+                  setCopied(true);
+                  setTimeout(() => {
+                    setCopied(false)
+                  }, 2000);
+
+                }}
+              />
+            </div>
+            {copied && (<p className="fixed top-48 right-10 z-10 rounded-md bg-slate-100 p-2">Link copied! </p>)}
+          </div>
+        )
+      }
       {/* LISTING TITLE */}
       <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
         <p className='text-2xl font-semibold'>
@@ -154,7 +150,11 @@ const Listing = () => {
         )}
         {contact && <Contact listing={listing} />}
       </div>
-    </main>
+
+      {/* IMAGE MODAL */}
+
+
+    </main >
   );
 };
 
