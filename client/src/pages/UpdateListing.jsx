@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getDownloadURL,
   getStorage,
@@ -10,7 +10,7 @@ import {
 import { app } from "../firebase";
 import { BsFillTrashFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { set } from "mongoose";
+
 import { useNavigate, useParams } from "react-router-dom";
 
 const UpdateListing = () => {
@@ -42,7 +42,8 @@ const UpdateListing = () => {
     const listingId = params.listingId;
     const res = await fetch(`/api/listing/get/${listingId}`);
     const data = await res.json();
-    if (data.success === false) {
+    if (data.success === false)
+    {
       console.log(data.message);
       return;
     }
@@ -54,13 +55,16 @@ const UpdateListing = () => {
   }, []);
 
   const handleImageSubmit = async (e) => {
+    e.preventDefault();
     setUploading(true);
     if (
       uploadedFiles.length > 0 &&
       uploadedFiles.length + formData.imageUrls.length < 7
-    ) {
+    )
+    {
       const promises = [];
-      for (let i = 0; i < uploadedFiles.length; i++) {
+      for (let i = 0; i < uploadedFiles.length; i++)
+      {
         promises.push(storeImage(uploadedFiles[i]));
       }
       Promise.all(promises)
@@ -75,8 +79,10 @@ const UpdateListing = () => {
         .catch((err) => {
           setImageUploadError("Image upload failed (2mb max per Image)");
           setUploading(false);
+          console.log(err)
         });
-    } else {
+    } else
+    {
       setImageUploadError(
         "You can only update 6 images per listing at least 1 image"
       );
@@ -116,7 +122,8 @@ const UpdateListing = () => {
   };
   const handleChange = (e) => {
     // sale and type
-    if (e.target.id === "sale" || e.target.id === "rent") {
+    if (e.target.id === "sale" || e.target.id === "rent")
+    {
       setFormData({
         ...formData,
         type: e.target.id,
@@ -127,7 +134,8 @@ const UpdateListing = () => {
       e.target.id === "parking" ||
       e.target.id === "furnished" ||
       e.target.id == "offer"
-    ) {
+    )
+    {
       setFormData({
         ...formData,
         [e.target.id]: e.target.checked,
@@ -138,7 +146,8 @@ const UpdateListing = () => {
       e.target.type === "number" ||
       e.target.type === "text" ||
       e.target.type === "textarea"
-    ) {
+    )
+    {
       setFormData({
         ...formData,
         [e.target.id]: e.target.value,
@@ -147,7 +156,8 @@ const UpdateListing = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+    try
+    {
       if (formData.imageUrls.length < 1)
         return setError("You must upload at least one image");
       if (+formData.regularPrice < +formData.discountPrice)
@@ -163,11 +173,13 @@ const UpdateListing = () => {
       });
       const data = await res.json();
       setLoading(false);
-      if (data.success === false) {
+      if (data.success === false)
+      {
         setError(data.message);
       }
       navigate(`/listing/${data._id}`);
-    } catch (error) {
+    } catch (error)
+    {
       setError(error.message);
       setLoading(false);
     }
