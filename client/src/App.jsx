@@ -11,8 +11,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
 import Listing from "./pages/Listing";
 import Search from "./components/Search";
-import UpdateListing from "./pages/updateListing";
-
+import UpdateListing from "./pages/UpdateListing";
+//bug fixed
 function App() {
   return (
     <BrowserRouter>
